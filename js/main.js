@@ -12,14 +12,22 @@
 //Check if there's a max capacity of the barbell.
 //Figure out how you would set up an array or an object to reflect user input of plate availability.
 
-let barWeight = 45;
-let userInputWeight = 600;
-let netWeight = userInputWeight - barWeight;
+document.querySelector("button").addEventListener("click", setUp);
+
+function setUp() {
+  document.querySelector(".output-text").innerText = ""; //Clear any text on page.
+  let barWeight = 45;
+  let userInputWeight = document.querySelector("input").value;
+  let netWeight = userInputWeight - barWeight;
+  parseArray(netWeight);
+  document.querySelector("input").value = "";
+}
 
 //This function parses through the array of available plate types (45lb, 35lb, etc) the user has available
+//Paramets should be a number and an array to parse through.
 function parseArray(weightNum) {
   let holder;
-  const plateWeightArray = [45, 25, 15, 10, 5, 2.5]; //Possible plates available.
+  const plateWeightArray = [45, 35, 25, 15, 10, 5, 2.5]; //Possible plates available.
 
   //Iterate through available plates as needed.
   for (let i = 0; i < plateWeightArray.length; i++) {
@@ -51,12 +59,15 @@ function plateCalculator(weightNum, plateWeight) {
   //If platesNeeded is not an even number (because we must use two plates at a time to keep bar load symmetrical) find the next lowest number that is even. Set that to newPlatesNeeded
   if (platesNeeded % 2 !== 0) {
     newPlatesNeeded = findLowestEvenNumberBefore(platesNeeded);
-    //console.log(newPlatesNeeded);
   } else {
     newPlatesNeeded = platesNeeded; //To keep code DRY and not have to console log for two different scenarios.
   }
+
   console.log(`${newPlatesNeeded} ${plateWeight} plates; ${newPlatesNeeded / 2} per side`);
-  difference = weightNum - newPlatesNeeded * plateWeight; //This line should deduct the global variable of netweight to a new netWeight in order to calculate the remaining weight accordingly to how many plates are needed
+  document.querySelector(".output-text").innerText += `${newPlatesNeeded} ${plateWeight} plates; ${
+    newPlatesNeeded / 2
+  } per side`;
+  difference = weightNum - newPlatesNeeded * plateWeight;
   return difference;
 }
 
@@ -71,5 +82,5 @@ function findLowestEvenNumberBefore(num) {
   return -1; // Return -1 if no even number is found before the given number
 }
 
-parseArray(netWeight);
+//parseArray(netWeight);
 //plateCalculator(450, 35);
