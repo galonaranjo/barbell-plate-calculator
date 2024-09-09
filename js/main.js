@@ -12,27 +12,44 @@
 //Check if there's a max capacity of the barbell.
 //Figure out how you would set up an array or an object to reflect user input of plate availability.
 
-document.querySelector("button").addEventListener("click", setUp);
+document.querySelector("#calculateBtn").addEventListener("click", setUp);
+document.querySelector("#availablePlatesBtn").addEventListener("click", togglePlateSelect);
 
 function setUp() {
   document.querySelector(".output-text").innerText = ""; //Clear any text on page.
-  let barWeight = 45;
-  let userInputWeight = document.querySelector("input").value;
+  let barWeight = parseFloat(document.querySelector("#barWeight").value) || 45;
+  let userInputWeight = parseFloat(document.querySelector("#weightInput").value);
+
+  if (isNaN(userInputWeight)) {
+    // No weight was entered, set netWeight to barWeight
+    document.querySelector(".output-text").innerText = `Total weight: ${barWeight}lbs (just the bar)`;
+    return;
+  } else if (userInputWeight < barWeight) {
+    // User input weight is less than bar weight
+    document.querySelector(".output-text").innerText = "Total weight cannot be less than the bar weight.";
+    return;
+  }
+
   let netWeight = userInputWeight - barWeight;
   parseArray(netWeight);
-  document.querySelector("input").value = "";
+  document.querySelector("#weightInput").value = "";
+}
+
+//Toggles the plateSelect div to be hidden or shown.
+function togglePlateSelect() {
+  const plateSelect = document.querySelector(".plateSelect");
+  plateSelect.classList.toggle("hidden");
 }
 
 //This function parses through the array of available plate types (45lb, 35lb, etc) the user has available
 //Paramets should be a number and an array to parse through.
 function parseArray(weightNum) {
   let holder;
-  const plateWeightArray = [45, 35, 25, 15, 10, 5, 2.5]; //Possible plates available.
+
+  const plateWeightArray = getAvailablePlates(); //Possible plates available.
 
   //Iterate through available plates as needed.
   for (let i = 0; i < plateWeightArray.length; i++) {
-    //Tester: console.log("i = " + i);
-    //Conditional checking if the weightNum is less than the current value * 2 (2 are needed to load the bar.) move to the next element in the array.
     if (weightNum < plateWeightArray[i] * 2) {
       continue;
     }
@@ -41,7 +58,6 @@ function parseArray(weightNum) {
       break;
     }
     weightNum = holder;
-    //console.log(weightNum);
     if (weightNum < plateWeightArray[plateWeightArray.length - 1] * 2) {
       console.log(`Looks like you might need some extra plates. You've got ${weightNum}lbs left over.`);
     }
@@ -53,8 +69,6 @@ function plateCalculator(weightNum, plateWeight) {
   let newPlatesNeeded;
   let difference;
   let platesNeeded = weightNum / plateWeight;
-  //console.log(`Raw ${plateWeight}lb plates needed = ${platesNeeded}`);
-  //console.log(weightNum);
 
   //If platesNeeded is not an even number (because we must use two plates at a time to keep bar load symmetrical) find the next lowest number that is even. Set that to newPlatesNeeded
   if (platesNeeded % 2 !== 0) {
@@ -82,5 +96,31 @@ function findLowestEvenNumberBefore(num) {
   return -1; // Return -1 if no even number is found before the given number
 }
 
-//parseArray(netWeight);
-//plateCalculator(450, 35);
+// This function returns an array of objects with the available plates.
+function getAvailablePlates() {
+  const plateWeights = [55, 45, 35, 25, 15, 10, 5, 2.5];
+  const plateIds = ["FiftyFive", "FortyFive", "ThirtyFive", "TwentyFive", "Fifteen", "Ten", "Five", "TwoAndHalf"];
+
+  let availablePlates = [];
+  plateWeights.forEach((weight, index) => {
+    const quantity = parseInt(document.getElementById(`quantity${plateIds[index]}`).value) || 0;
+    availablePlates.push({ [weight]: quantity });
+  });
+  console.log(availablePlates);
+  return availablePlates;
+}
+
+// function getAvailablePlates() {
+//   const plateWeights = [55, 45, 35, 25, 15, 10, 5, 2.5];
+//   const plateIds = ["FiftyFive", "FortyFive", "ThirtyFive", "TwentyFive", "Fifteen", "Ten", "Five", "TwoAndHalf"];
+
+//   let availablePlates = [];
+//   plateWeights.forEach((weight, index) => {
+//     const quantity = parseInt(document.getElementById(`quantity${plateIds[index]}`).value);
+//     for (let i = 0; i < quantity; i++) {
+//       availablePlates.push(weight);
+//     }
+//   });
+//   console.log(availablePlates);
+//   return availablePlates;
+// }

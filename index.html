@@ -18,33 +18,46 @@
       <form action="#">
         <label for="weightInput">Enter Weight in lbs.</label>
         <input type="number" name="Enter Weight:" id="weightInput" placeholder="225lbs" />
-        <button>Calculate</button>
+        <label for="barWeight">Barbell Weight:</label>
+        <input type="number" name="Enter Barbell Weight:" id="barWeight" placeholder="45lbs" />
+        <button type="button" id="calculateBtn">Calculate</button>
       </form>
       <p class="output-text"></p>
-      <div class="plateSelect">
-        <label for="quantityFiftyFive">55lbs plates:</label>
-        <input type="number" id="quantityFortyFive" name="quantity" />
-
-        <label for="quantityFortyFive">45lbs plates:</label>
-        <input type="number" id="quantityFortyFive" name="quantity" />
-
-        <label for="quantityThirtyFive">35lbs plates:</label>
-        <input type="number" id="quantityThirtyFive" name="quantity" />
-
-        <label for="quantityTwentyFive">25lbs plates:</label>
-        <input type="number" id="quantityTwentyFive" name="quantity" />
-
-        <label for="quantityFifteen">15lbs plates:</label>
-        <input type="number" id="quantityFiften" name="quantity" />
-
-        <label for="quantityTen">10lbs plates:</label>
-        <input type="number" id="quantityTen" name="quantity" />
-
-        <label for="quantityFive">5lbs plates:</label>
-        <input type="number" id="quantityFive" name="quantity" />
-
-        <label for="quantityTwoAndHalf">2.5lbs plates:</label>
-        <input type="number" id="quantityTwoAndHalf" name="quantity" />
+      <button type="button" id="availablePlatesBtn">Available Plates</button>
+      <div class="plateSelect hidden">
+        <h2>Available Plates</h2>
+        <div class="plate-row">
+          <span>55</span>
+          <input type="number" id="quantityFiftyFive" min="0" value="0" step="2" />
+        </div>
+        <div class="plate-row">
+          <span>45</span>
+          <input type="number" id="quantityFortyFive" min="0" value="0" step="2" />
+        </div>
+        <div class="plate-row">
+          <span>35</span>
+          <input type="number" id="quantityThirtyFive" min="0" value="0" step="2" />
+        </div>
+        <div class="plate-row">
+          <span>25</span>
+          <input type="number" id="quantityTwentyFive" min="0" value="0" step="2" />
+        </div>
+        <div class="plate-row">
+          <span>15</span>
+          <input type="number" id="quantityFifteen" min="0" value="0" step="2" />
+        </div>
+        <div class="plate-row">
+          <span>10</span>
+          <input type="number" id="quantityTen" min="0" value="0" step="2" />
+        </div>
+        <div class="plate-row">
+          <span>5</span>
+          <input type="number" id="quantityFive" min="0" value="0" step="2" />
+        </div>
+        <div class="plate-row">
+          <span>2.5</span>
+          <input type="number" id="quantityTwoAndHalf" min="0" value="0" step="2" />
+        </div>
       </div>
     </div>
     <script type="text/javascript" src="js/main.js"></script>
