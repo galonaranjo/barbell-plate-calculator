@@ -45,27 +45,32 @@ function togglePlateSelect() {
 //Paramets should be a number and an array to parse through.
 function parseArray(weightNum) {
   let holder;
-
-  const plateWeightArray = getAvailablePlates(); //Possible plates available.
-
-  //Iterate through available plates as needed.
+  const plateWeightArray = getAvailablePlates(); // Array of objects with plate weights and quantities
+  // Iterate through available plates as needed.
   for (let i = 0; i < plateWeightArray.length; i++) {
-    if (weightNum < plateWeightArray[i] * 2) {
+    const plateWeight = Object.keys(plateWeightArray[i])[0];
+    const quantity = plateWeightArray[i][plateWeight];
+    console.log(plateWeight, quantity);
+    if (weightNum < plateWeight * quantity || quantity === 0) {
       continue;
     }
-    holder = plateCalculator(weightNum, plateWeightArray[i]);
+
+    holder = plateCalculator(weightNum, parseFloat(plateWeight), quantity);
     if (holder === 0) {
       break;
     }
     weightNum = holder;
-    if (weightNum < plateWeightArray[plateWeightArray.length - 1] * 2) {
-      console.log(`Looks like you might need some extra plates. You've got ${weightNum}lbs left over.`);
-    }
+  }
+
+  if (weightNum > 0) {
+    document.querySelector(
+      ".output-text"
+    ).innerText += `Looks like you might need some extra plates. You've got ${weightNum}lbs left over.`;
   }
 }
 
 //Function logs to the user the amount of plates needed for the inputted plateWeight and returns the difference in order to pass through the next array element above.
-function plateCalculator(weightNum, plateWeight) {
+function plateCalculator(weightNum, plateWeight, quantity) {
   let newPlatesNeeded;
   let difference;
   let platesNeeded = weightNum / plateWeight;
@@ -76,6 +81,8 @@ function plateCalculator(weightNum, plateWeight) {
   } else {
     newPlatesNeeded = platesNeeded; //To keep code DRY and not have to console log for two different scenarios.
   }
+  //Check newPlatesNeeded against quantity. If newPlatesNeeded is greater than quantity, we need to log the quantity of plates available and the amount of weight left over.
+  if (newPlatesNeeded >= quantity) newPlatesNeeded = quantity;
 
   console.log(`${newPlatesNeeded} ${plateWeight} plates; ${newPlatesNeeded / 2} per side`);
   document.querySelector(".output-text").innerText += `${newPlatesNeeded} ${plateWeight} plates; ${
@@ -123,4 +130,27 @@ function getAvailablePlates() {
 //   });
 //   console.log(availablePlates);
 //   return availablePlates;
+// }
+
+// //This function parses through the array of available plate types (45lb, 35lb, etc) the user has available
+// //Paramets should be a number and an array to parse through.
+// function parseArray(weightNum) {
+//   let holder;
+
+//   const plateWeightArray = getAvailablePlates(); //Possible plates available.
+
+//   //Iterate through available plates as needed.
+//   for (let i = 0; i < plateWeightArray.length; i++) {
+//     if (weightNum < plateWeightArray[i] * 2) {
+//       continue;
+//     }
+//     holder = plateCalculator(weightNum, plateWeightArray[i]);
+//     if (holder === 0) {
+//       break;
+//     }
+//     weightNum = holder;
+//     if (weightNum < plateWeightArray[plateWeightArray.length - 1] * 2) {
+//       console.log(`Looks like you might need some extra plates. You've got ${weightNum}lbs left over.`);
+//     }
+//   }
 // }
