@@ -14,6 +14,8 @@
 
 document.querySelector("#calculateBtn").addEventListener("click", setUp);
 document.querySelector("#availablePlatesBtn").addEventListener("click", togglePlateSelect);
+document.querySelector("#submitAvailablePlates").addEventListener("click", setToLocalStorage);
+document.addEventListener("DOMContentLoaded", loadAvailablePlatesFromStorage);
 
 function setUp() {
   document.querySelector(".output-text").innerText = ""; //Clear any text on page.
@@ -117,40 +119,26 @@ function getAvailablePlates() {
   return availablePlates;
 }
 
-// function getAvailablePlates() {
-//   const plateWeights = [55, 45, 35, 25, 15, 10, 5, 2.5];
-//   const plateIds = ["FiftyFive", "FortyFive", "ThirtyFive", "TwentyFive", "Fifteen", "Ten", "Five", "TwoAndHalf"];
+function setToLocalStorage() {
+  const availablePlates = getAvailablePlates();
+  localStorage.setItem("availablePlates", JSON.stringify(availablePlates));
+  console.log("Available plates stored in local storage");
+  // Optionally, you can provide some user feedback here
+  alert("Available plates have been saved!");
+}
 
-//   let availablePlates = [];
-//   plateWeights.forEach((weight, index) => {
-//     const quantity = parseInt(document.getElementById(`quantity${plateIds[index]}`).value);
-//     for (let i = 0; i < quantity; i++) {
-//       availablePlates.push(weight);
-//     }
-//   });
-//   console.log(availablePlates);
-//   return availablePlates;
-// }
+function loadAvailablePlatesFromStorage() {
+  const storedPlates = localStorage.getItem("availablePlates");
+  if (storedPlates) {
+    const availablePlates = JSON.parse(storedPlates);
+    const plateIds = ["FiftyFive", "FortyFive", "ThirtyFive", "TwentyFive", "Fifteen", "Ten", "Five", "TwoAndHalf"];
 
-// //This function parses through the array of available plate types (45lb, 35lb, etc) the user has available
-// //Paramets should be a number and an array to parse through.
-// function parseArray(weightNum) {
-//   let holder;
-
-//   const plateWeightArray = getAvailablePlates(); //Possible plates available.
-
-//   //Iterate through available plates as needed.
-//   for (let i = 0; i < plateWeightArray.length; i++) {
-//     if (weightNum < plateWeightArray[i] * 2) {
-//       continue;
-//     }
-//     holder = plateCalculator(weightNum, plateWeightArray[i]);
-//     if (holder === 0) {
-//       break;
-//     }
-//     weightNum = holder;
-//     if (weightNum < plateWeightArray[plateWeightArray.length - 1] * 2) {
-//       console.log(`Looks like you might need some extra plates. You've got ${weightNum}lbs left over.`);
-//     }
-//   }
-// }
+    availablePlates.forEach((plate, index) => {
+      const weight = Object.keys(plate)[0];
+      const quantity = plate[weight];
+      document.getElementById(`quantity${plateIds[index]}`).value = quantity;
+    });
+  } else {
+    console.log("Please add available plates.");
+  }
+}
